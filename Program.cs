@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace YahtzeeAlgorithm
 {
@@ -10,31 +9,43 @@ namespace YahtzeeAlgorithm
             Dice dice = new Dice();
             Cup cup = new Cup();
 
-            int numberOfDice = 5;
-            int numberOfRolls = 3;
+            int[][] answer = cup.RollVariableNumberOfDiceThreeTimes();
 
-            // int result = dice.RollOneDice(numberOfDice);
-
-            // int[] rollResult = cup.RollFiveDice(numberOfDice);
-            //foreach (int number in rollResult)
-            //{
-            //    Console.WriteLine(number);
-            //}
-
-            int[,] result = cup.RollFiveDiceThreeTimes(numberOfRolls, numberOfDice);
-
-            foreach (int roll in result)
+            foreach (int[] row in answer)
             {
-                Console.Write("{0} ", roll);
+                foreach (int die in row)
+                {
+                    Console.WriteLine(die);
+                }
             }
+
+            /*
+            int[][] whichDiceToReroll = new int[][]
+            {
+                new int[] { 0 },
+                new int[] { 1, 3 },
+            };
+
+            int[] numOfDiceRolling = new int[] { 5, 4, 3 };
+
+            int[][] result = cup.RollDiceThreeTimesAskingWhichToReroll(whichDiceToReroll, numOfDiceRolling);
+
+            foreach (int[] roll in result)
+            {
+                foreach (int number in roll)
+                {
+                    Console.WriteLine("{0} ", number);
+                }
+            }
+            */
+            
         }
 
         public class Dice
         {
             Random random = new Random();
 
-            // v1.0 create a function to roll ONE 6 sided dice
-            public int RollOneDice(int numberOfDice)
+            public int RollOneDice()
             {
                 return random.Next(1, 7);
             }
@@ -44,8 +55,7 @@ namespace YahtzeeAlgorithm
         {
             Random random = new Random();
 
-            // v1.1 create a function to roll FIVE 6 sided dice
-            public int[] RollFiveDice(int numberOfDice)
+            public int[] RollFiveDiceOnce(int numberOfDice)
             {
                 int[] result = new int[numberOfDice];
 
@@ -56,36 +66,120 @@ namespace YahtzeeAlgorithm
                 return result;
             }
 
-            // v1.2 Create a Game loop to roll all FIVE dice 3 times
-            public int[,] RollFiveDiceThreeTimes(int numOfRolls, int numOfDice)
+            public int[,] RollAllFiveDiceThreeTimes(int numOfRolls, int numOfDice)
             {
-                // int[,] 2dArray = new int[rows, collumns]
                 int[,] result = new int[numOfRolls, numOfDice];
 
-                int index1 = 0;
+                int rollCount = 0;
 
-                while (index1 < numOfRolls)
+                while (rollCount < numOfRolls)
                 {
                     for (int i = 0; i < numOfDice; i++)
                     {
-                        result[index1, i] = random.Next(1, 7);
+                        result[rollCount, i] = random.Next(1, 7);
                     }
-                    index1++;
+                    rollCount++;
                 }
-
                 return result;
             }
+
+            public int UserPicksOneDieToReroll(int[] rollResult, int pick)
+            {
+                return rollResult[pick];
+            }
+
+            public int[] UserPicksMultipleDieToReroll(int[] rollResult, int numOfDicePicking, int[] choices)
+            {
+                int[] picks = new int[numOfDicePicking];
+
+                for (int i = 0; i < choices.Length; i++)
+                {
+                    picks[i] = rollResult[choices[i]];   
+                }
+                    return picks;
+            }
+
+            public int[] RollVariableNumberOfDiceOnce(int amountToRoll)
+            {
+                int[] result = new int[amountToRoll];
+
+                for (int i = 0; i < amountToRoll; i++)
+                {
+                    result[i] = random.Next(1, 7);
+                }
+                return result;
+            }
+
+            public int[][] RollVariableNumberOfDiceThreeTimes()
+            {
+                int roll1 = 5;
+                int roll2 = 4;
+                int roll3 = 3;
+
+                int[][] rolls = new int[3][];
+                rolls[0] = new int[5];
+                rolls[1] = new int[4];
+                rolls[2] = new int[3];
+
+                int rollCounter = 0;
+
+                while (rollCounter < 3)
+                {
+                    for (int i = 1; i < roll1; i++)
+                    {
+                        rolls[rollCounter][i] = random.Next(1, 7);
+                    }
+                    rollCounter++;
+                    for (int i = 1; i < roll2; i++)
+                    {
+                        rolls[rollCounter][i] = random.Next(1, 7);
+                    }
+                    rollCounter++;
+                    for (int i = 1; i < roll3; i++)
+                    {
+                        rolls[rollCounter][i] = random.Next(1, 7);
+                    }
+                    rollCounter++;
+                }
+                return rolls;
+            }
+
+
+            // v1.6 allow the user to roll the dice 3 times
+            // after each roll ask the player for the dice to re roll
+            // print the ones asked to re-roll
+            /*
+            public int[][] RollDiceThreeTimesAskingWhichToReroll(int[][] whichDiceToReroll, int[] numOfDiceRolling)
+            {
+                int numOfRolls = 3;
+
+                int[][] rerollLog = new int[2][];
+
+                int rollCounter = 0;
+
+                while (rollCounter < numOfRolls)
+                {
+                    // roll dice 3 times
+                    for (int i = 0; i < numOfRolls; i++) // i = 0, 1, 2
+                    {
+                        // how many dice to roll on attempt 2 + 3
+                        for (int j = 0; j < numOfDiceRolling[i]; j++) // j = 0, 1, 2
+                        {
+                            rerollLog[][] = random.Next(1, 7); 
+                        }
+                        rollCounter++;
+                    }
+                    
+                }
+
+                return rerollLog;
+            }
+            */
         }
     }
 }
 
 /*
-    v1.3 allow the user to pick ONE dice to reroll (+ print the one they picked)
-    v1.4 allow the user to pick multiple dice to reroll (+ print them)
-    v1.5 allow the user to roll a set number of dice
-    v1.6 allow the user to roll the dice 3 times
-        after each roll ask the player for the dice to re roll
-        re-roll those dice
     v1.7 display only the newly re-rolled dice
     v1.8 ensure previous dice are also displayed
     v1.9 if player has a yahtzee at any time, display it
