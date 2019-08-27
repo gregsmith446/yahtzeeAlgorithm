@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace YahtzeeAlgorithm
 {
@@ -9,36 +10,12 @@ namespace YahtzeeAlgorithm
             Dice dice = new Dice();
             Cup cup = new Cup();
 
-            int[][] answer = cup.RollVariableNumberOfDiceThreeTimes();
 
-            foreach (int[] row in answer)
-            {
-                foreach (int die in row)
-                {
-                    Console.WriteLine(die);
-                }
-            }
+            // the dice the user wants to reroll
+            int[] toReRoll1 = new int[] { 0, 1 };
+            int[] toReRoll2 = new int[] { 0, 1 };
 
-            /*
-            int[][] whichDiceToReroll = new int[][]
-            {
-                new int[] { 0 },
-                new int[] { 1, 3 },
-            };
-
-            int[] numOfDiceRolling = new int[] { 5, 4, 3 };
-
-            int[][] result = cup.RollDiceThreeTimesAskingWhichToReroll(whichDiceToReroll, numOfDiceRolling);
-
-            foreach (int[] roll in result)
-            {
-                foreach (int number in roll)
-                {
-                    Console.WriteLine("{0} ", number);
-                }
-            }
-            */
-            
+            cup.RollDiceThreeTimesAskingWhichToReroll(toReRoll1, toReRoll2);
         }
 
         public class Dice
@@ -145,42 +122,78 @@ namespace YahtzeeAlgorithm
             }
 
 
-            // v1.6 allow the user to roll the dice 3 times
-            // after each roll ask the player for the dice to re roll
-            // print the ones asked to re-roll
-            /*
-            public int[][] RollDiceThreeTimesAskingWhichToReroll(int[][] whichDiceToReroll, int[] numOfDiceRolling)
+            // v1.6 allow the user to roll the dice 3 times, after each roll ask the player for the dice to re roll, then print the ones asked to re-roll
+            // v1.7 display only the newly re-rolled dice
+            // v1.8 ensure previous dice are also displayed
+            // v1.9 if player has a yahtzee at any time, display it
+            public void RollDiceThreeTimesAskingWhichToReroll(int[] diceToReroll1, int[] diceToReroll2)
             {
-                int numOfRolls = 3;
-
-                int[][] rerollLog = new int[2][];
+                int[] roll1 = new int[5];
+                int[] roll2 = new int[diceToReroll1.Length];
+                int[] roll3 = new int[diceToReroll2.Length];
 
                 int rollCounter = 0;
 
-                while (rollCounter < numOfRolls)
+                while (rollCounter < 3)
                 {
-                    // roll dice 3 times
-                    for (int i = 0; i < numOfRolls; i++) // i = 0, 1, 2
+                    for (int i = 0; i < 5; i++)
                     {
-                        // how many dice to roll on attempt 2 + 3
-                        for (int j = 0; j < numOfDiceRolling[i]; j++) // j = 0, 1, 2
-                        {
-                            rerollLog[][] = random.Next(1, 7); 
-                        }
-                        rollCounter++;
+                        roll1[i] = random.Next(1, 7);
                     }
-                    
-                }
+                        Console.WriteLine("The results of roll 1");
+                        foreach (int dice in roll1)
+                        {
+                            Console.WriteLine(dice);
+                        }
+                       
+                    if (roll1.Distinct().Count() == 1)
+                    {
+                        Console.WriteLine("Yahtzee!");
+                    }
+                    Console.WriteLine("Not Yahtzee");
 
-                return rerollLog;
+                    rollCounter++;
+
+                    for (int i = 0; i < diceToReroll1.Length; i++)
+                    {
+                        Console.WriteLine("Dice being re-rolled: {0}", roll1[diceToReroll1[i]]);
+                        roll1[diceToReroll1[i]] = random.Next(1, 7);
+                    }
+                        Console.WriteLine("The results of re-roll 2");
+                        foreach (int dice in roll1)
+                        {
+                            Console.WriteLine(dice);
+                        }
+
+                    if (roll1.Distinct().Count() == 1)
+                    {
+                        Console.WriteLine("Yahtzee!");
+                    }
+                    Console.WriteLine("Not Yahtzee");
+
+                    rollCounter++;
+
+                    for (int i = 0; i < diceToReroll2.Length; i++)
+                    {
+                        Console.WriteLine("Dice being re-rolled: {0}", roll1[diceToReroll2[i]]);
+                        roll1[diceToReroll2[i]] = random.Next(1, 7);
+                    }
+                        Console.WriteLine("The results of re-roll 3");
+                        foreach (int dice in roll1)
+                        {
+                            Console.WriteLine(dice);
+                        }
+
+                    if (roll1.Distinct().Count() == 1)
+                    {
+                        Console.WriteLine("Yahtzee!");
+                    }
+                    Console.WriteLine("Not Yahtzee");
+
+                    rollCounter++;
+                }  
             }
-            */
         }
     }
 }
 
-/*
-    v1.7 display only the newly re-rolled dice
-    v1.8 ensure previous dice are also displayed
-    v1.9 if player has a yahtzee at any time, display it
-*/
